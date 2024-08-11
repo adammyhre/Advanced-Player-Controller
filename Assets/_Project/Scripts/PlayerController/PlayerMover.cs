@@ -67,6 +67,7 @@ namespace AdvancedController {
         public bool IsGrounded() => isGrounded;
         public Vector3 GetGroundNormal() => sensor.GetNormal();
         
+        // NOTE: Older versions of Unity use rb.velocity instead
         public void SetVelocity(Vector3 velocity) => rb.linearVelocity = velocity + currentGroundAdjustmentVelocity;
         public void SetExtendSensorRange(bool isExtended) => isUsingExtendedSensorRange = isExtended;
 
