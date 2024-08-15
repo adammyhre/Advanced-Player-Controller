@@ -13,6 +13,6 @@ Additional dependencies are included in this repository, but may be moved in the
 
 ## YouTube
 
-[Anatomy of an Advanced Player Controller](#)
+[Anatomy of an Advanced Player Controller](https://youtu.be/jSauntZrQro)
 
 You can also check out my [YouTube channel](https://www.youtube.com/@git-amend?sub_confirmation=1) for more Unity content.
