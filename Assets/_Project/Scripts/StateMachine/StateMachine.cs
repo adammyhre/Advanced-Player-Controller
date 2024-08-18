@@ -13,16 +13,7 @@ namespace UnityUtils.StateMachine
 
         public void Update() {
             var transition = GetTransition();
-            // Debug.Log($"Current node: {currentNode.State}");
-            // foreach (var node in nodes) {
-            //     foreach (var transition1 in node.Value.Transitions) {
-            //         Debug.Log($"Transition from {node.Value.State} to {transition1.To}");
-            //     }
-            // }
-            // foreach (var transition1 in anyTransitions) {
-            //     Debug.Log($"Any transition to {transition1.To}");
-            // }
-            // Debug.Break();
+
             if (transition != null) {
                 ChangeState(transition.To);
                 foreach (var node in nodes.Values) {

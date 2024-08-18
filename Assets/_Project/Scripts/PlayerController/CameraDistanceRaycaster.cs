@@ -7,7 +7,7 @@ namespace AdvancedController
         [SerializeField, Required] Transform cameraTransform;
         [SerializeField, Required] Transform cameraTargetTransform;
         
-        public LayerMask layerMask = ~0;
+        public LayerMask layerMask = Physics.AllLayers;
         public float minimumDistanceFromObstacles = 0.1f;
         public float smoothingFactor = 25f;
         
@@ -16,12 +16,14 @@ namespace AdvancedController
 
         void Awake() {
             tr = transform;
+            
             layerMask &= ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
             currentDistance = (cameraTargetTransform.position - tr.position).magnitude;
         }
 
         void LateUpdate() {
             Vector3 castDirection = cameraTargetTransform.position - tr.position;
+            
             float distance = GetCameraDistance(castDirection);
             
             currentDistance = Mathf.Lerp(currentDistance, distance, Time.deltaTime * smoothingFactor);
@@ -29,8 +31,12 @@ namespace AdvancedController
         }
 
         float GetCameraDistance(Vector3 castDirection) {
-            var distance = castDirection.magnitude + minimumDistanceFromObstacles;
-            if (Physics.Raycast(new Ray(tr.position, castDirection), out RaycastHit hit, distance, layerMask, QueryTriggerInteraction.Ignore)) {
+            float distance = castDirection.magnitude + minimumDistanceFromObstacles;
+            // if (Physics.Raycast(new Ray(tr.position, castDirection), out RaycastHit hit, distance, layerMask, QueryTriggerInteraction.Ignore)) {
+            //     return Mathf.Max(0f, hit.distance - minimumDistanceFromObstacles);
+            // }
+            float sphereRadius = 0.5f;
+            if (Physics.SphereCast(new Ray(tr.position, castDirection), sphereRadius, out RaycastHit hit, distance, layerMask, QueryTriggerInteraction.Ignore)) {
                 return Mathf.Max(0f, hit.distance - minimumDistanceFromObstacles);
             }
             return castDirection.magnitude;

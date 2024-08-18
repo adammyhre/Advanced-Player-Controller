@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityUtils.StateMachine;
 
 namespace AdvancedController {
@@ -18,6 +19,10 @@ namespace AdvancedController {
 
         public FallingState(PlayerController controller) {
             this.controller = controller;
+        }
+
+        public void OnEnter() {
+            controller.OnFallStart();
         }
     }
 

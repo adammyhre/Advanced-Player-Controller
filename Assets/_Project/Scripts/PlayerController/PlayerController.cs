@@ -90,7 +90,7 @@ namespace AdvancedController {
             
             At(falling, rising, () => IsRising());
             At(falling, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
-            At(falling, sliding, () => IsGroundTooSteep());
+            At(falling, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
             
             At(sliding, rising, () => IsRising());
             At(sliding, falling, () => !mover.IsGrounded());
@@ -99,6 +99,7 @@ namespace AdvancedController {
             At(rising, grounded, () => mover.IsGrounded() && !IsGroundTooSteep());
             At(rising, sliding, () => mover.IsGrounded() && IsGroundTooSteep());
             At(rising, falling, () => IsFalling());
+            At(rising, falling, () => ceilingDetector != null && ceilingDetector.HitCeiling());
             
             At(jumping, rising, () => jumpTimer.IsFinished || jumpKeyWasLetGo);
             At(jumping, falling, () => ceilingDetector != null && ceilingDetector.HitCeiling());
@@ -129,6 +130,8 @@ namespace AdvancedController {
             savedMovementVelocity = CalculateMovementVelocity();
             
             ResetJumpKeys();
+            
+            if (ceilingDetector != null) ceilingDetector.Reset();
         }
         
         Vector3 CalculateMovementVelocity() => CalculateMovementDirection() * movementSpeed;
@@ -225,6 +228,12 @@ namespace AdvancedController {
             OnLand.Invoke(collisionVelocity);
         }
 
+        public void OnFallStart() {
+            var currentUpMomemtum = VectorMath.ExtractDotVector(momentum, tr.up);
+            momentum = VectorMath.RemoveDotVector(momentum, tr.up);
+            momentum -= tr.up * currentUpMomemtum.magnitude;
+        }
+        
         void AdjustHorizontalMomentum(ref Vector3 horizontalMomentum, Vector3 movementVelocity) {
             if (horizontalMomentum.magnitude > movementSpeed) {
                 if (VectorMath.GetDotProduct(movementVelocity, horizontalMomentum.normalized) > 0f) {

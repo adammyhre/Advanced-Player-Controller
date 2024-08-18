@@ -1,6 +1,7 @@
 using UnityEngine;
 
 namespace AdvancedController {
+    [RequireComponent(typeof(PlayerController))]
     public class AnimationController : MonoBehaviour {
         PlayerController controller;
         Animator animator;
